@@ -1,0 +1,6 @@
+{
+  "name": "SafarShare",
+  "description": "A comprehensive carpooling app backend supporting multiple vehicle types, real-time tracking, and secure bookings.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
