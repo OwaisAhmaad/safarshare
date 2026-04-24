@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Put, Param, Query, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TripService } from './trip.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { CreateTripDto, SearchTripDto } from './dto/trip.dto';
+import { Trip } from './entities/trip.entity';
 
 @ApiTags('trips')
 @Controller('trips')
@@ -24,6 +25,14 @@ export class TripController {
   @ApiResponse({ status: 200, description: 'List of trips matching criteria', type: [Trip] })
   search(@Query() query: SearchTripDto) {
     return this.tripService.search(query);
+  }
+
+  @Get('my')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Get current driver's posted trips" })
+  findMine(@CurrentUser('userId') userId: number) {
+    return this.tripService.findByOwner(userId);
   }
 
   @Get(':id')

@@ -141,6 +141,14 @@ export class TripService {
     return trip;
   }
 
+  async findByOwner(ownerId: number): Promise<Trip[]> {
+    return this.tripRepository.find({
+      where: { owner_id: ownerId },
+      relations: ['vehicle'],
+      order: { created_at: 'DESC' },
+    });
+  }
+
   async cancel(id: number, ownerId: number): Promise<Trip> {
     const trip = await this.findOne(id);
     if (trip.owner_id !== ownerId) {
